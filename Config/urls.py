@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 # for swaggger
 from django.conf.urls.static import static
-from rest_framework_swagger.views import get_swagger_view
+# from rest_framework_swagger.views import get_swagger_view
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
@@ -22,7 +22,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('admin_panel.urls')),
+    # path('', include('admin_panel.urls')),
     path('api/', include('api.urls')),
     path('user/', include('user.urls')),
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0),name='schema-swagger-ui'),
