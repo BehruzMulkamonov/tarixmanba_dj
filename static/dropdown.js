@@ -90,44 +90,56 @@ function change2(value){
 function change3() {
     let selected = $("#id_status")[0].value;
     if (selected === "Gl" || selected === "AU" || selected === "Fl" || selected === "VR") {
-        $(".field-locations")[0].style.display = "none";
-        $(".field-link")[0].style.display = "none";
-        $(".field-files")[0].style.display = "block";
-        $(".field-video")[0].style.display = "none";
-
-        // let location_elements = $("#id_locations")[0].options;
-        // for (var i=0; i < location_elements.length; i++) {
-        //     location_elements[i].selected = false;
-        // }
-
-        // $("#id_link")[0].value = "";
+        if (selected === "Gl") {
+            $(".field-locations")[0].style.display = "none";
+            $(".field-link")[0].style.display = "none";
+            $(".field-gallery_files")[0].style.display = "block";
+            $(".field-audio_files")[0].style.display = "none";
+            $(".field-file_files")[0].style.display = "none";
+            $(".field-vr_files")[0].style.display = "none";
+            $(".field-video")[0].style.display = "none";
+        } else if (selected === "AU") {
+            $(".field-locations")[0].style.display = "none";
+            $(".field-link")[0].style.display = "none";
+            $(".field-gallery_files")[0].style.display = "none";
+            $(".field-audio_files")[0].style.display = "block";
+            $(".field-file_files")[0].style.display = "none";
+            $(".field-vr_files")[0].style.display = "none";
+            $(".field-video")[0].style.display = "none";
+        } else if (selected === "Fl") {
+            $(".field-locations")[0].style.display = "none";
+            $(".field-link")[0].style.display = "none";
+            $(".field-gallery_files")[0].style.display = "none";
+            $(".field-audio_files")[0].style.display = "none";
+            $(".field-file_files")[0].style.display = "block";
+            $(".field-vr_files")[0].style.display = "none";
+            $(".field-video")[0].style.display = "none";
+        } else if (selected === "VR") {
+            $(".field-locations")[0].style.display = "none";
+            $(".field-link")[0].style.display = "none";
+            $(".field-gallery_files")[0].style.display = "none";
+            $(".field-audio_files")[0].style.display = "none";
+            $(".field-file_files")[0].style.display = "none";
+            $(".field-vr_files")[0].style.display = "block";
+            $(".field-video")[0].style.display = "none";
+        }
     } else if (selected === "VD") {
         $(".field-locations")[0].style.display = "none";
         $(".field-link")[0].style.display = "block";
-        $(".field-files")[0].style.display = "none";
+        $(".field-gallery_files")[0].style.display = "none";
+        $(".field-audio_files")[0].style.display = "none";
+        $(".field-file_files")[0].style.display = "none";
+        $(".field-vr_files")[0].style.display = "none";
         $(".field-video")[0].style.display = "block";
-
-        // let location_elements = $("#id_locations")[0].options;
-        // for (var i=0; i < location_elements.length; i++) {
-        //     location_elements[i].selected = false;
-        // }
-
-        // let file_elements = $("#id_files")[0].options;
-        // for (var i=0; i < file_elements.length; i++) {
-        //     file_elements[i].selected = false;
-        // }
+    
     } else {
         $(".field-locations")[0].style.display = "block";
         $(".field-link")[0].style.display = "none";
-        $(".field-files")[0].style.display = "none";
+        $(".field-gallery_files")[0].style.display = "none";
+        $(".field-audio_files")[0].style.display = "none";
+        $(".field-file_files")[0].style.display = "none";
+        $(".field-vr_files")[0].style.display = "none";
         $(".field-video")[0].style.display = "none";
-
-        // let file_elements = $("#id_files")[0].options;
-        // for (var i=0; i < file_elements.length; i++) {
-        //     file_elements[i].selected = false;
-        // }
-
-        // $("#id_link")[0].value = "";
     }
 }
 

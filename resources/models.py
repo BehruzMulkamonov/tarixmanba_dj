@@ -136,7 +136,10 @@ class Resource(BaseModel):
         LOCATION = 'LN', 'Location'
     status = models.CharField(max_length=30, choices=Status, default=Status.GALLERY)
     locations = models.ManyToManyField(Location, related_name="resourse_locations", null=True, blank=True)
-    files = models.ManyToManyField(File, related_name="resource_files", null=True, blank=True)
+    gallery_files = models.ManyToManyField(File, related_name="gallery_resource_files", null=True, blank=True)
+    audio_files = models.ManyToManyField(File, related_name="audio_resource_files", null=True, blank=True)
+    file_files = models.ManyToManyField(File, related_name="file_resource_files", null=True, blank=True)
+    vr_files = models.ManyToManyField(File, related_name="vr_resource_files", null=True, blank=True)
     link = models.URLField(max_length=500, null=True, blank=True)
     video = models.FileField(upload_to="media/videos/", null=True, blank=True)
 
