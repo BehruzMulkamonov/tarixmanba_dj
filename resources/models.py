@@ -11,8 +11,8 @@ class BaseModel(models.Model):
 
 class Category(BaseModel):
     title = models.CharField(max_length=255)
-    icon = models.FileField(blank=True, null=True , upload_to="icons/")  # shunga iconca kodi yozilidi
-    image = models.FileField(blank=True, null=True , upload_to="icons/")  # shunga iconca kodi yozilidi
+    icon = models.FileField(blank=True, null=True, upload_to="icons/")  # shunga iconca kodi yozilidi
+    image = models.FileField(blank=True, null=True, upload_to="icons/")  # shunga iconca kodi yozilidi
     order = models.IntegerField()
     interactive = models.BooleanField()
 
@@ -62,8 +62,9 @@ class Filters(BaseModel):
     def __str__(self):
         return self.title
 
+
 class Province(BaseModel):
-    title = models.CharField(max_length=255,blank=True, null=True)
+    title = models.CharField(max_length=255, blank=True, null=True)
     latitude = models.CharField(max_length=500, blank=True, null=True)
     longitude = models.CharField(max_length=500, blank=True, null=True)
 
@@ -73,7 +74,6 @@ class Province(BaseModel):
     class Meta:
         verbose_name = 'Province'
         verbose_name_plural = 'Provinces'
-
 
 
 # class Interive(BaseModel):
@@ -101,7 +101,7 @@ class Province(BaseModel):
 
 #     def __str__(self):
 #         return str(self.latitude) + " " + str(self.longitude)
-    
+
 
 # class File(models.Model):
 #     file = models.FileField(upload_to='media/files/resource', blank=True, null=True)
@@ -110,22 +110,16 @@ class Province(BaseModel):
 #         return str(self.pk)
 
 
-class Resource(BaseModel):
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True,
-                                 related_name='category')
-    filter_category = models.ForeignKey(FilterCategories, on_delete=models.SET_NULL, null=True,
-                                        related_name='filter_category')
-    filters = models.ManyToManyField(Filters, blank=True,
-                                     related_name='filters')
-    period_filter = models.ForeignKey(PeriodFilter, on_delete=models.SET_NULL, null=True,
-                                      related_name='period_filter')
+class Resource(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='resources')
+    filter_category = models.ForeignKey(FilterCategories, on_delete=models.SET_NULL, null=True, related_name='resources')
+    filters = models.ManyToManyField(Filters, blank=True, related_name='resources')
+    period_filter = models.ForeignKey(PeriodFilter, on_delete=models.SET_NULL, null=True, related_name='resources')
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='media/images/resource', blank=True, null=True)
     content = models.TextField()
     statehood = models.BooleanField(default=True)
-    province = models.ForeignKey(Province, on_delete=models.SET_NULL, null=True,
-                                 related_name='select_province')
-   
+    province = models.ForeignKey(Province, on_delete=models.SET_NULL, null=True, related_name='resources')
 
     class Meta:
         verbose_name = 'Resource'
@@ -135,44 +129,38 @@ class Resource(BaseModel):
         return self.title
 
 
+class Attributes(models.Model):
+    resource = models.ForeignKey(Resource, on_delete=models.SET_NULL, null=True, related_name='attributes')
+    title = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
 
 
+class Contents(models.Model):
+    resource = models.ForeignKey(Resource, on_delete=models.SET_NULL, null=True, related_name='contents')
+    title = models.CharField(max_length=255)
+    description = models.TextField()
 
 
-class Attributes(BaseModel):
-    resource_attribute = models.ForeignKey(Resource, on_delete=models.SET_NULL, null=True,
-                                           related_name='resource_attribute')
-    attributes_title = models.CharField(max_length=255)
-    attributes_description = models.CharField(max_length=255)
-
-
-
-class Contents(BaseModel):
-    resource_content = models.ForeignKey(Resource, on_delete=models.SET_NULL, null=True,
-                                         related_name='resource_content')
-    contents_title = models.CharField(max_length=255)
-    contents_description = models.TextField()
-
-
-
-# 
 class Gallery(models.Model):
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='gallery')
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='galleries')
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='media/images/resource', blank=True, null=True)
 
+
 class GalleryImages(models.Model):
-    gallery = models.ForeignKey(Gallery, on_delete=models.CASCADE, related_name='gallery_images')
+    gallery = models.ForeignKey(Gallery, on_delete=models.CASCADE, related_name='images')
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='gallery_images')
     image = models.ImageField(upload_to='media/images/resource')
 
     def __str__(self):
         return self.image.url
 
+
 class File(models.Model):
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='files')
     title = models.CharField(max_length=255)
     file = models.FileField(upload_to='media/files/resource', blank=True, null=True)
+
 
 class FileFile(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='file_files')
@@ -182,10 +170,12 @@ class FileFile(models.Model):
     def __str__(self):
         return self.file.url
 
+
 class Audio(models.Model):
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='audios')
     title = models.CharField(max_length=255)
     audio = models.FileField(upload_to='media/files/resource', blank=True, null=True)
+
 
 class AudioFile(models.Model):
     audio = models.ForeignKey(Audio, on_delete=models.CASCADE, related_name='audio_files')
@@ -195,18 +185,21 @@ class AudioFile(models.Model):
     def __str__(self):
         return self.file.url
 
+
 class VirtualReality(models.Model):
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='virtual_realities')
     title = models.CharField(max_length=255)
     audio = models.FileField(upload_to='media/files/resource', blank=True, null=True)
 
+
 class VirtualRealityFile(models.Model):
-    virtual_reality = models.ForeignKey(VirtualReality, on_delete=models.CASCADE, related_name='vr_files')
+    virtual_reality = models.ForeignKey(VirtualReality, on_delete=models.CASCADE, related_name='files')
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='vr_files')
     file = models.FileField(upload_to='media/files/resource')
 
     def __str__(self):
         return self.file.url
+
 
 class Video(models.Model):
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='videos')
@@ -214,8 +207,9 @@ class Video(models.Model):
     file = models.FileField(upload_to='media/files/resource', blank=True, null=True)
     link = models.URLField(max_length=500, null=True, blank=True)
 
+
 class VideoFile(models.Model):
-    video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='video_files')
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='files')
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='video_files')
     file = models.FileField(upload_to='media/files/resource')
     link = models.URLField(max_length=500, null=True, blank=True)
@@ -223,14 +217,16 @@ class VideoFile(models.Model):
     def __str__(self):
         return self.file.url
 
+
 class Location(models.Model):
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='locations')
     title = models.CharField(max_length=255)
     latitude = models.CharField(max_length=500, blank=True, null=True)
     longitude = models.CharField(max_length=500, blank=True, null=True)
 
+
 class AddLocation(models.Model):
-    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='add_locations')
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='add_locations')
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='additional_locations')
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='additional_locations')
     latitude = models.CharField(max_length=500, blank=True, null=True)
     longitude = models.CharField(max_length=500, blank=True, null=True)

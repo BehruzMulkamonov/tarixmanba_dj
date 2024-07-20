@@ -1,79 +1,16 @@
 from django.contrib import admin
-# from unfold.admin import ModelAdmin
-from .models import Category, FilterCategories, PeriodFilter, Filters,  Resource, Province, \
-        Gallery, GalleryImages, File, FileFile, Audio, AudioFile, VirtualReality, VirtualRealityFile, Video, \
-        VideoFile, Location, AddLocation
 from django import forms
+from .models import Category, FilterCategories, PeriodFilter, Filters, Resource, Province, \
+    Gallery, GalleryImages, File, FileFile, Audio, AudioFile, VirtualReality, VirtualRealityFile, Video, \
+    VideoFile, Location, AddLocation, Contents, Attributes
 
 
 admin.site.register(Category)
 admin.site.register(FilterCategories)
 admin.site.register(PeriodFilter)
 admin.site.register(Filters)
-# admin.site.register(File)
-# admin.site.register(Location)
 admin.site.register(Province)
 
-
-
-# @admin.register(Resource)
-# class ResourseModelAdmin(admin.ModelAdmin):
-#     list_display = ["title", "category"]
-
-#     class Media:
-#         js = (
-#             "dropdown.js",
-#             "https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js",
-#         )
-
-
-
-# class GalleryImagesInline(admin.TabularInline):
-#     model = GalleryImages
-
-# @admin.register(Gallery)
-# class GalleryAdmin(admin.ModelAdmin):
-#     inlines = [GalleryImagesInline]
-
-
-# class FileFileInline(admin.TabularInline):
-#     model = FileFile
-
-# @admin.register(File)
-# class FileAdmin(admin.ModelAdmin):
-#     inlines = [FileFileInline]
-
-
-# class AudioFileInline(admin.TabularInline):
-#     model = AudioFile
-
-# @admin.register(Audio)
-# class AudioAdmin(admin.ModelAdmin):
-#     inlines = [AudioFileInline]
-
-
-# class VirtualRealityFileInline(admin.TabularInline):
-#     model = VirtualRealityFile
-
-# @admin.register(VirtualReality)
-# class VirtualRealityAdmin(admin.ModelAdmin):
-#     inlines = [VirtualRealityFileInline]
-
-
-# class VideoFileInline(admin.TabularInline):
-#     model = VideoFile
-
-# @admin.register(Video)
-# class VideoAdmin(admin.ModelAdmin):
-#     inlines = [VideoFileInline]
-
-
-# class AddLocationInline(admin.TabularInline):
-#     model = AddLocation
-
-# @admin.register(Location)
-# class LocationAdmin(admin.ModelAdmin):
-#     inlines = [AddLocationInline]
 
 class ResourceAdminForm(forms.ModelForm):
     class Meta:
@@ -88,42 +25,74 @@ class ResourceAdminForm(forms.ModelForm):
         return instance
 
 
+class AttributesInline(admin.TabularInline):
+    model = Attributes
+    extra = 1
+
+
+class ContentsInline(admin.TabularInline):
+    model = Contents
+    extra = 1
+
+
+class GalleryInline(admin.TabularInline):
+    model = Gallery
+    extra = 1
+
+
 class GalleryImagesInline(admin.TabularInline):
     model = GalleryImages
+    extra = 1
 
+
+class FileInline(admin.TabularInline):
+    model = File
+    extra = 1
 
 
 class FileFileInline(admin.TabularInline):
     model = FileFile
+    extra = 1
 
-    
+
+class AudioInline(admin.TabularInline):
+    model = Audio
+    extra = 1
+
+
 class AudioFileInline(admin.TabularInline):
     model = AudioFile
+    extra = 1
+
+
+class VirtualRealityInline(admin.TabularInline):
+    model = VirtualReality
+    extra = 1
 
 
 class VirtualRealityFileInline(admin.TabularInline):
     model = VirtualRealityFile
+    extra = 1
 
-    
+
+class VideoInline(admin.TabularInline):
+    model = Video
+    extra = 1
+
+
 class VideoFileInline(admin.TabularInline):
     model = VideoFile
+    extra = 1
+
+
+class LocationInline(admin.TabularInline):
+    model = Location
+    extra = 1
 
 
 class AddLocationInline(admin.TabularInline):
     model = AddLocation
-
-@admin.register(Resource)
-class ResourceAdmin(admin.ModelAdmin):
-    form = ResourceAdminForm
-    list_display = ["title", "category"]
-    inlines = [
-        GalleryImagesInline,
-        FileFileInline,
-        AudioFileInline,
-        VirtualRealityFileInline,
-        VideoFileInline,
-        AddLocationInline,
-    ]
+    extra = 1
 
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)
@@ -134,7 +103,6 @@ class ResourceAdmin(admin.ModelAdmin):
                 instance.save()
             formset.save_m2m()
 
-
     class Media:
         js = (
             "dropdown.js",
@@ -142,9 +110,10 @@ class ResourceAdmin(admin.ModelAdmin):
         )
 
 
-# admin.site.register(GalleryImages)
-# admin.site.register(FileFile)
-# admin.site.register(AudioFile)
-# admin.site.register(VirtualRealityFile)
-# admin.site.register(VideoFile)
-# admin.site.register(AddLocation)
+@admin.register(Resource)
+class ResourceAdmin(admin.ModelAdmin):
+    list_display = ('title', 'statehood',)
+    search_fields = ('title',)
+    inlines = [
+        AttributesInline, ContentsInline, GalleryInline, FileInline, AudioInline, VirtualRealityInline, VideoInline, LocationInline, AddLocationInline
+    ]
