@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 # from admin_panel.serializer.resources import Base64FileField, ResourceAdminSerializer
-from resources.models import Category, File, PeriodFilter, FilterCategories, Filters, Province, Resource,  \
+from resources.models import Category,  PeriodFilter, FilterCategories, Filters, Province, Resource,  \
     Attributes, Contents
 import six
 import base64
@@ -165,8 +165,9 @@ class ResourceSerializer(serializers.ModelSerializer):
         fields = [
             'category', 'filter_category', 'filters', 'period_filter', 'title',
             'image', 'content', 'statehood', 'province', 'category_name',
-            'filter_category_title', 'status', 'locations', 'files', 'link', 'video'
-        ]
+            'filter_category_title'        ]
+
+# , 'status', 'locations', 'files', 'link', 'video'
 
     def get_category_name(self, obj):
         return obj.category.title if obj.category else None
@@ -185,3 +186,86 @@ class CategoryResourceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'title', 'icon', 'image', 'category_resources']
+
+
+
+
+
+
+
+
+
+from rest_framework import serializers
+from .models import Gallery, GalleryImages, File, FileFile, Audio, AudioFile, VirtualReality, VirtualRealityFile, Video, VideoFile, Location, AddLocation
+
+class GalleryImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GalleryImages
+        fields = ('image',)
+
+class GallerySerializer(serializers.ModelSerializer):
+    gallery = GalleryImagesSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Gallery
+        fields = ('id', 'title', 'image', 'gallery')
+
+class FileFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FileFile
+        fields = ('file',)
+
+class FileSerializer(serializers.ModelSerializer):
+    file = FileFileSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = File
+        fields = ('id', 'title', 'file')
+
+class AudioFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AudioFile
+        fields = ('file',)
+
+class AudioSerializer(serializers.ModelSerializer):
+    audio = AudioFileSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Audio
+        fields = ('id', 'title', 'audio')
+
+class VirtualRealityFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VirtualRealityFile
+        fields = ('file',)
+
+class VirtualRealitySerializer(serializers.ModelSerializer):
+    virtual_reality = VirtualRealityFileSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = VirtualReality
+        fields = ('id', 'title', 'audio', 'virtual_reality')
+
+class VideoFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VideoFile
+        fields = ('file', 'link')
+
+class VideoSerializer(serializers.ModelSerializer):
+    video = VideoFileSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Video
+        fields = ('id', 'title', 'file', 'link', 'video')
+
+class AddLocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AddLocation
+        fields = ('latitude', 'longitude')
+
+class LocationSerializer(serializers.ModelSerializer):
+    location = AddLocationSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Location
+        fields = ('id', 'title', 'latitude', 'longitude', 'location')
