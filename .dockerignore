@@ -1,0 +1,28 @@
+**/*.pyc
+**/__pycache__
+*.pyo
+
+# Virtual environment
+venv/
+env/
+
+# Django static and media files
+staticfiles/
+media/
+
+# Local configuration files
+.env
+*.env
+db.sqlite3
+
+# Git files
+.git
+.gitignore
+
+# Docker files
+Dockerfile
+docker-compose.yml
+
+# IDE files
+.vscode/
+.idea/

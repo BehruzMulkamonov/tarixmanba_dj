@@ -146,12 +146,6 @@ class Gallery(models.Model):
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='media/images/resource', blank=True, null=True)
 
-
-class GalleryImages(models.Model):
-    gallery = models.ForeignKey(Gallery, on_delete=models.CASCADE, related_name='images')
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='gallery_images')
-    image = models.ImageField(upload_to='media/images/resource')
-
     def __str__(self):
         return self.image.url
 
@@ -161,14 +155,8 @@ class File(models.Model):
     title = models.CharField(max_length=255)
     file = models.FileField(upload_to='media/files/resource', blank=True, null=True)
 
-
-class FileFile(models.Model):
-    file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='file_files')
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='file_files')
-    file = models.FileField(upload_to='media/files/resource')
-
     def __str__(self):
-        return self.file.url
+        return self.title
 
 
 class Audio(models.Model):
@@ -176,14 +164,8 @@ class Audio(models.Model):
     title = models.CharField(max_length=255)
     audio = models.FileField(upload_to='media/files/resource', blank=True, null=True)
 
-
-class AudioFile(models.Model):
-    audio = models.ForeignKey(Audio, on_delete=models.CASCADE, related_name='audio_files')
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='audio_files')
-    file = models.FileField(upload_to='media/files/resource')
-
     def __str__(self):
-        return self.file.url
+        return self.title
 
 
 class VirtualReality(models.Model):
@@ -191,27 +173,14 @@ class VirtualReality(models.Model):
     title = models.CharField(max_length=255)
     audio = models.FileField(upload_to='media/files/resource', blank=True, null=True)
 
-
-class VirtualRealityFile(models.Model):
-    virtual_reality = models.ForeignKey(VirtualReality, on_delete=models.CASCADE, related_name='files')
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='vr_files')
-    file = models.FileField(upload_to='media/files/resource')
-
     def __str__(self):
-        return self.file.url
+        return self.title
 
 
 class Video(models.Model):
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='videos')
     title = models.CharField(max_length=255)
     file = models.FileField(upload_to='media/files/resource', blank=True, null=True)
-    link = models.URLField(max_length=500, null=True, blank=True)
-
-
-class VideoFile(models.Model):
-    video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='files')
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='video_files')
-    file = models.FileField(upload_to='media/files/resource')
     link = models.URLField(max_length=500, null=True, blank=True)
 
     def __str__(self):
@@ -224,9 +193,3 @@ class Location(models.Model):
     latitude = models.CharField(max_length=500, blank=True, null=True)
     longitude = models.CharField(max_length=500, blank=True, null=True)
 
-
-class AddLocation(models.Model):
-    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='additional_locations')
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='additional_locations')
-    latitude = models.CharField(max_length=500, blank=True, null=True)
-    longitude = models.CharField(max_length=500, blank=True, null=True)

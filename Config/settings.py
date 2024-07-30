@@ -1,4 +1,3 @@
-
 from corsheaders.defaults import default_headers
 
 import os
@@ -6,7 +5,6 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -18,7 +16,6 @@ SECRET_KEY = 'django-insecure-(no#j@8q@)2)&e)=pdl$a5h*8gvn=%c8g*bt-3(g#&x3lk#$r&
 DEBUG = True
 
 ALLOWED_HOSTS = ["*", ]
-
 
 # Application definition
 
@@ -32,19 +29,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # APPS
-
+    'corsheaders',
     'admin_panel',
-    'user', 
+    'user',
     'api',
-    'resources', 
+    'resources',
     'other_app',
 
     # Additional library
     'rest_framework',
     'django_filters',
-    'rest_framework_swagger',       # Swagger 
-    'drf_yasg',                      # Yet Another Swagger generator
-    'corsheaders',
+    'rest_framework_swagger',  # Swagger
+    'drf_yasg',  # Yet Another Swagger generator
 
 ]
 
@@ -58,6 +54,14 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'language-code',
+]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'Config.urls'
 
@@ -79,10 +83,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Config.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 
 # DATABASES = {
 #     'default': {
@@ -91,12 +93,18 @@ WSGI_APPLICATION = 'Config.wsgi.application'
 #     }
 # }
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'tarixmanba_db',
+        'USER': 'tarixmanba_user',
+        'PASSWORD': 'tarixmanba_password',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
+
 
 
 # Password validation
@@ -117,7 +125,6 @@ AUTH_PASSWORD_VALIDATORS = [
     # },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -127,9 +134,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
-
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -141,8 +145,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATICFILES_DIRS = [BASE_DIR / 'static', ]
 
 
-
-
+# CSRF_TRUSTED_ORIGINS = [
+#     'https://subdomain.tarixmanba.uz',
+#     'http://subdomain.tarixmanba.uz',
+# ]
+#
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -152,38 +161,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
-        
+
     ],
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    # 'PAGE_SIZE': 2,
 }
-
-CORS_ORIGIN_ALLOW_ALL = True
-
-
-
-CORS_ALLOW_HEADERS = list(default_headers) + [
-    'language-code',
-]
 
 # AUTH_USER_MODEL = "user.CustomUser"
 FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800
-
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'file': {
-#             'level': 'DEBUG',
-#             'class': 'logging.FileHandler',
-#             'filename': '/var/log/ngnix/django.log',
-#         },
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['file'],
-#             'level': 'DEBUG',
-#             'propagate': True,
-#         },
-#     },
-# }

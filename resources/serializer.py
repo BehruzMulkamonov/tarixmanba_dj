@@ -1,11 +1,14 @@
 from rest_framework import serializers
 
 # from admin_panel.serializer.resources import Base64FileField, ResourceAdminSerializer
-from resources.models import Category,  PeriodFilter, FilterCategories, Filters, Province, Resource,  \
-    Attributes, Contents
+
+from django.core.files.base import ContentFile
 import six
 import base64
-from django.core.files.base import ContentFile
+
+from .models import Gallery, File, Audio, VirtualReality, Video, \
+    Location, Resource, Category, PeriodFilter, FilterCategories, Filters, Province, Contents, Attributes
+
 
 class Base64ImageField(serializers.ImageField):
     def to_internal_value(self, data):
@@ -16,7 +19,7 @@ class Base64ImageField(serializers.ImageField):
                 # Find the comma in the base64 string
                 comma_index = data.find(',')
                 if comma_index != -1:
-                    data = data[comma_index+1:]
+                    data = data[comma_index + 1:]
 
             # Decode the base64 string
             try:
@@ -36,138 +39,106 @@ class Base64ImageField(serializers.ImageField):
         file_name = str(uuid.uuid4())[:12]  # 12 characters are more than enough.
         return '{}.png'.format(file_name)
 
-# class PeriodFilterSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = PeriodFilter
-#         fields = ['id', 'title', 'category',]
-
-
-# class FilterCategoriesSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = FilterCategories
-#         fields = ['id','title', 'category', ]
-
-
-# class FiltersSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Filters
-#         fields = ['id','filter_category', 'title', ]
-
-
-# class ProvinceSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Province
-#         fields = ['id','title', ]
-
-
-
-# class AttributesSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Attributes
-#         fields = ['id','resource_attribute', 'attributes_title', 'attributes_description', ]
-
-
-# class ContentsSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Contents
-#         fields = ['id','resource_content', 'contents_title', 'contents_description']
-
-
-# class FileSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = File
-#         fields = ['file']
-
-# class ResourceSerializer(serializers.ModelSerializer):
-#     category_name = serializers.SerializerMethodField()
-#     filter_category_title = serializers.SerializerMethodField()
-#     period_filter_title = serializers.SerializerMethodField()
-#     image = Base64ImageField(required=False, allow_null=True)
-#     files = FileSerializer(many=True, required=False, allow_null=True)
-#     locations = serializers.StringRelatedField(many=True, required=False, allow_null=True)
-
-#     class Meta:
-#         model = Resource
-#         fields = [
-#             'category', 'filter_category', 'filters', 'period_filter', 'title',
-#             'image', 'content', 'statehood', 'province', 'status', 'locations',
-#             'files', 'link', 'video', 'category_name', 'filter_category_title',
-#             'period_filter_title'
-#         ]
-
-#     def get_category_name(self, obj):
-#         return obj.category.title if obj.category else None
-
-#     def get_filter_category_title(self, obj):
-#         return obj.filter_category.title if obj.filter_category else None
-
-#     def get_period_filter_title(self, obj):
-#         return obj.period_filter.title if obj.period_filter else None
-        
-
-   
-
-
-
-
-# class CategorySerializer(serializers.ModelSerializer):
-#     category = ResourceSerializer(many=True,read_only=True)
-#     class Meta:
-#         model = Category
-#         fields = ['id','title', 'icon', 'order', 'category']
-#     def get_category(self, obj):
-#         return obj.category.all()
-
-
-# class CategoryResourceSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Category
-#         fields = ['id','title', 'icon', 'order', ]
-
-
-
-from rest_framework import serializers
-from resources.models import Resource, Category, PeriodFilter, FilterCategories, Filters, Province
-# from drf_extra_fields.fields import Base64ImageField
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
 
+
 class PeriodFilterSerializer(serializers.ModelSerializer):
     class Meta:
         model = PeriodFilter
         fields = '__all__'
+
 
 class FilterCategoriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = FilterCategories
         fields = '__all__'
 
+
 class FiltersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Filters
         fields = '__all__'
+
 
 class ProvinceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Province
         fields = '__all__'
 
+
+class GallerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Gallery
+        fields = ('id', 'title', 'image', 'image')
+
+
+class FileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = File
+        fields = ('id', 'title', 'file')
+
+
+class AudioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Audio
+        fields = ('id', 'title', 'audio')
+
+
+class VirtualRealitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VirtualReality
+        fields = ('id', 'title', 'audio')
+
+
+class VideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Video
+        fields = ('id', 'title', 'file', 'link',)
+
+
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = ('id', 'title', 'latitude', 'longitude')
+
+
+class AttributesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attributes
+        fields = ('id', 'title', 'description')
+
+
+class ContentsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contents
+        fields = ('id', 'title', 'description')
+
+
 class ResourceSerializer(serializers.ModelSerializer):
     category_name = serializers.SerializerMethodField()
     filter_category_title = serializers.SerializerMethodField()
-    image = Base64ImageField(required=False, allow_null=True)
+
+    attributes = AttributesSerializer(many=True, read_only=True)
+    contents = ContentsSerializer(many=True, read_only=True)
+    galleries = GallerySerializer(many=True, read_only=True)
+    files = FileSerializer(many=True, read_only=True)
+    audios = AudioSerializer(many=True, read_only=True)
+    virtual_realities = VirtualRealitySerializer(many=True, read_only=True)
+    videos = VideoSerializer(many=True, read_only=True)
+    locations = LocationSerializer(many=True, read_only=True)
 
     class Meta:
         model = Resource
         fields = [
-            'category', 'filter_category', 'filters', 'period_filter', 'title',
+            'id', 'category', 'filter_category', 'filters', 'period_filter', 'title',
             'image', 'content', 'statehood', 'province', 'category_name',
-            'filter_category_title'        ]
-
-# , 'status', 'locations', 'files', 'link', 'video'
+            'filter_category_title', 'attributes', 'contents', 'galleries',
+            'files', 'audios', 'virtual_realities', 'videos', 'locations'
+        ]
 
     def get_category_name(self, obj):
         return obj.category.title if obj.category else None
@@ -175,97 +146,40 @@ class ResourceSerializer(serializers.ModelSerializer):
     def get_filter_category_title(self, obj):
         return obj.filter_category.title if obj.filter_category else None
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+
+        request = self.context.get('request')
+
+        def build_absolute_url(path):
+            if path and not path.startswith('http'):
+                return self.context['request'].build_absolute_uri(path)
+            return path
+
+        # Absolyut URL'larni yaratish
+        if 'image' in representation:
+            representation['image'] = build_absolute_url(representation['image'])
+
+        for gallery in representation.get('galleries', []):
+            if 'image' in gallery:
+                gallery['image'] = build_absolute_url(gallery['image'])
+
+        for file in representation.get('files', []):
+            if 'file' in file:
+                file['file'] = build_absolute_url(file['file'])
+
+        return representation
+
+
 class ResourceAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Resource
         fields = '__all__'
 
+
 class CategoryResourceSerializer(serializers.ModelSerializer):
-    category_resources = ResourceSerializer(many=True, source='category')
+    resources = ResourceSerializer(many=True)
 
     class Meta:
         model = Category
-        fields = ['id', 'title', 'icon', 'image', 'category_resources']
-
-
-
-
-
-
-
-
-
-from rest_framework import serializers
-from .models import Gallery, GalleryImages, File, FileFile, Audio, AudioFile, VirtualReality, VirtualRealityFile, Video, VideoFile, Location, AddLocation
-
-class GalleryImagesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = GalleryImages
-        fields = ('image',)
-
-class GallerySerializer(serializers.ModelSerializer):
-    gallery = GalleryImagesSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Gallery
-        fields = ('id', 'title', 'image', 'gallery')
-
-class FileFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = FileFile
-        fields = ('file',)
-
-class FileSerializer(serializers.ModelSerializer):
-    file = FileFileSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = File
-        fields = ('id', 'title', 'file')
-
-class AudioFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AudioFile
-        fields = ('file',)
-
-class AudioSerializer(serializers.ModelSerializer):
-    audio = AudioFileSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Audio
-        fields = ('id', 'title', 'audio')
-
-class VirtualRealityFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = VirtualRealityFile
-        fields = ('file',)
-
-class VirtualRealitySerializer(serializers.ModelSerializer):
-    virtual_reality = VirtualRealityFileSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = VirtualReality
-        fields = ('id', 'title', 'audio', 'virtual_reality')
-
-class VideoFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = VideoFile
-        fields = ('file', 'link')
-
-class VideoSerializer(serializers.ModelSerializer):
-    video = VideoFileSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Video
-        fields = ('id', 'title', 'file', 'link', 'video')
-
-class AddLocationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AddLocation
-        fields = ('latitude', 'longitude')
-
-class LocationSerializer(serializers.ModelSerializer):
-    location = AddLocationSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Location
-        fields = ('id', 'title', 'latitude', 'longitude', 'location')
+        fields = ['id', 'title', 'icon', 'image', 'resources']

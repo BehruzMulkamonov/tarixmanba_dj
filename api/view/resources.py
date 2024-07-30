@@ -95,7 +95,6 @@
 #     return Response(serialized_data)
 
 
-
 # @api_view(['GET'])
 # def periodFilterListView(request):
 #     paginator = PageNumberPagination()
@@ -226,7 +225,6 @@
 #     return Response(serialized_data)
 
 
-
 # @api_view(['GET'])
 # def catResourceListView(request):
 #     category = Category.objects.all()
@@ -268,8 +266,6 @@
 #             resource['image'] = request.build_absolute_uri(resource['image'])
 
 #     return Response(serialized_data)
-
-
 
 
 from rest_framework import generics
@@ -403,7 +399,7 @@ def resourceListView(request):
     paginator.page_size = 10
     resources = Resource.objects.all()
     result_page = paginator.paginate_queryset(resources, request)
-    serializer = ResourceSerializer(result_page, many=True)
+    serializer = ResourceSerializer(result_page, context={'request': request}, many=True)
     serialized_data = serializer.data
     for data in serialized_data:
         if data.get('image'):
@@ -414,7 +410,7 @@ def resourceListView(request):
 @api_view(['GET'])
 def resourceDetailView(request, pk):
     resource = Resource.objects.get(pk=pk)
-    serializer = ResourceSerializer(resource, many=False)
+    serializer = ResourceSerializer(resource, context={'request': request}, many=False)
     serialized_data = serializer.data
 
     if serialized_data.get('image'):
@@ -426,7 +422,7 @@ def resourceDetailView(request, pk):
 @api_view(['GET'])
 def catResourceListView(request):
     category = Category.objects.all()
-    serializer = CategoryResourceSerializer(category, many=True)
+    serializer = CategoryResourceSerializer(category, context={'request': request}, many=True)
     serialized_data = serializer.data
 
     for data in serialized_data:
@@ -439,7 +435,7 @@ def catResourceListView(request):
 def catResourceDetailView(request, pk):
     cat = Category.objects.get(pk=pk)
     resourse = Resource.objects.filter(category=cat)
-    serializer = ResourceSerializer(resourse, many=True)
+    serializer = ResourceSerializer(resourse, context={'request': request}, many=True)
     serialized_data = serializer.data
 
     for resource in serialized_data:
@@ -447,3 +443,4 @@ def catResourceDetailView(request, pk):
             resource['image'] = request.build_absolute_uri(resource['image'])
 
     return Response(serialized_data)
+
