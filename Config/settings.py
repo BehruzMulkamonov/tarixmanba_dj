@@ -13,9 +13,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-(no#j@8q@)2)&e)=pdl$a5h*8gvn=%c8g*bt-3(g#&x3lk#$r&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["*", ]
+ALLOWED_HOSTS = [
+    'raqamli.tarixmanba.uz',
+    'localhost',
+    '127.0.0.1'
+]
 
 # Application definition
 
@@ -147,12 +151,15 @@ STATICFILES_DIRS = [BASE_DIR / 'static', ]
 
 CSRF_TRUSTED_ORIGINS = [
     'http://raqamli.tarixmanba.uz',
-    ]
+    'https://raqamli.tarixmanba.uz',
+]
 
-# CSRF_COOKIE_DOMAIN = '.tarixmanba.uz'
+CSRF_COOKIE_DOMAIN = 'raqamli.tarixmanba.uz'
 
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+# Agar SSL ishlatmasangiz, bu sozlamalarni False ga o'zgartiring
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
