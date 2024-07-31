@@ -145,11 +145,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATICFILES_DIRS = [BASE_DIR / 'static', ]
 
 
-# CSRF_TRUSTED_ORIGINS = [
-#     'https://subdomain.tarixmanba.uz',
-#     'http://subdomain.tarixmanba.uz',
-# ]
-#
+CSRF_TRUSTED_ORIGINS = [
+    'http://raqamli.tarixmanba.uz',
+    ]
+
+CSRF_COOKIE_DOMAIN = '.tarixmanba.uz'
+
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True
 
