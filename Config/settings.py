@@ -100,7 +100,7 @@ DATABASES = {
         'NAME': 'tarixmanba_db',
         'USER': 'tarixmanba_user',
         'PASSWORD': 'tarixmanba_password',
-        'HOST': 'localhost',
+        'HOST': '10.254.0.11',
         'PORT': '5432',
     }
 }
