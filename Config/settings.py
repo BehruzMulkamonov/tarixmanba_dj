@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-(no#j@8q@)2)&e)=pdl$a5h*8gvn=%c8g*bt-3(g#&x3lk#$r&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -86,25 +86,23 @@ WSGI_APPLICATION = 'Config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tarixmanba_db',
-        'USER': 'tarixmanba_user',
-        'PASSWORD': 'tarixmanba_password',
-        'HOST': 'db',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'tarixmanba_db',
+#         'USER': 'tarixmanba_user',
+#         'PASSWORD': 'tarixmanba_password',
+#         'HOST': 'db',
+#         'PORT': '5432',
+#     }
+# }
 
 
 # Password validation
@@ -138,14 +136,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATICFILES_DIRS = [BASE_DIR / 'static', ]
-
 
 CSRF_TRUSTED_ORIGINS = [
     'http://raqamli.tarixmanba.uz',
@@ -157,7 +153,6 @@ CSRF_COOKIE_DOMAIN = 'raqamli.tarixmanba.uz'
 # Agar SSL ishlatmasangiz, bu sozlamalarni False ga o'zgartiring
 CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
