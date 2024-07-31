@@ -149,10 +149,10 @@ CSRF_TRUSTED_ORIGINS = [
     'http://raqamli.tarixmanba.uz',
     ]
 
-CSRF_COOKIE_DOMAIN = '.tarixmanba.uz'
+# CSRF_COOKIE_DOMAIN = '.tarixmanba.uz'
 
-# CSRF_COOKIE_SECURE = True
-# SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
