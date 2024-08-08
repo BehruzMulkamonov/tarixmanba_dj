@@ -274,9 +274,9 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 # from admin_panel.serializer.resources import ResourceAdminSerializer
-from resources.models import Category, PeriodFilter, FilterCategories, Filters, Province, Resource
+from resources.models import Category, PeriodFilter, FilterCategories, Filters, Province, Resource, Location
 from resources.serializer import CategorySerializer, PeriodFilterSerializer, FilterCategoriesSerializer, \
-    FiltersSerializer, ProvinceSerializer, ResourceSerializer, CategoryResourceSerializer
+    FiltersSerializer, ProvinceSerializer, ResourceSerializer, CategoryResourceSerializer, LocationSerializer
 
 
 @api_view(['GET'])
@@ -443,4 +443,18 @@ def catResourceDetailView(request, pk):
             resource['image'] = request.build_absolute_uri(resource['image'])
 
     return Response(serialized_data)
+
+# behruz
+@api_view(['GET'])
+def category_locations_view(request, pk):
+    try:
+        category = Category.objects.get(pk=pk)
+    except Category.DoesNotExist:
+        return Response({"error": "Category not found"}, status=404)
+
+    locations = Location.objects.filter(resource__category=category)
+    serializer = LocationSerializer(locations, many=True, context={'request': request})
+    return Response(serializer.data)
+
+
 

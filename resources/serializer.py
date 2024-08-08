@@ -183,3 +183,16 @@ class CategoryResourceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'title', 'icon', 'image', 'resources']
+
+
+# Behruz
+
+
+class LocationSerializer(serializers.ModelSerializer):
+    resource_title = serializers.CharField(source='resource.title')
+    category_id = serializers.IntegerField(source='resource.category.id')
+    resource_id = serializers.IntegerField(source='resource.id')
+
+    class Meta:
+        model = Location
+        fields = ['resource_title', 'category_id', 'resource_id', 'latitude', 'longitude']
