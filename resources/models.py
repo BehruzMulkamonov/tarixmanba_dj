@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.utils.translation import gettext_lazy as _
+from ckeditor_uploader.fields import RichTextUploadingField
 
 class BaseModel(models.Model):
     created_time = models.DateTimeField(auto_now_add=True, auto_now=False)
@@ -117,7 +118,7 @@ class Resource(models.Model):
     period_filter = models.ForeignKey(PeriodFilter, on_delete=models.SET_NULL, null=True, related_name='resources')
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='media/images/resource', blank=True, null=True)
-    content = models.TextField()
+    content = RichTextUploadingField()
     statehood = models.BooleanField(default=True)
     province = models.ForeignKey(Province, on_delete=models.SET_NULL, null=True, related_name='resources')
 
@@ -138,7 +139,7 @@ class Attributes(models.Model):
 class Contents(models.Model):
     resource = models.ForeignKey(Resource, on_delete=models.SET_NULL, null=True, related_name='contents')
     title = models.CharField(max_length=255)
-    description = models.TextField()
+    description = RichTextUploadingField()
 
 
 class Gallery(models.Model):

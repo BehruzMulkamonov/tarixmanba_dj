@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework_swagger',  # Swagger
     'drf_yasg',  # Yet Another Swagger generator
+    'ckeditor',
 
 ]
 
@@ -168,3 +169,19 @@ REST_FRAMEWORK = {
 
 # AUTH_USER_MODEL = "user.CustomUser"
 FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800
+
+
+# CKEditor Settings
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js' 
+CKEDITOR_CONFIGS = {
+    'default':
+        {
+            'toolbar': 'full',
+            'width': 'auto',
+            'extraPlugins': ','.join([
+                'codesnippet',
+            ]),
+        },
+}
