@@ -118,7 +118,6 @@ class Resource(models.Model):
     period_filter = models.ForeignKey(PeriodFilter, on_delete=models.SET_NULL, null=True, related_name='resources')
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='media/images/resource', blank=True, null=True)
-    content = RichTextUploadingField()
     statehood = models.BooleanField(default=True)
     province = models.ForeignKey(Province, on_delete=models.SET_NULL, null=True, related_name='resources')
 
@@ -185,7 +184,8 @@ class Video(models.Model):
     link = models.URLField(max_length=500, null=True, blank=True)
 
     def __str__(self):
-        return self.file.url
+        # return self.file.url
+        return self.file.url if self.file else self.title
 
 
 class Location(models.Model):

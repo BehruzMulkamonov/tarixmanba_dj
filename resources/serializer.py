@@ -135,7 +135,7 @@ class ResourceSerializer(serializers.ModelSerializer):
         model = Resource
         fields = [
             'id', 'category', 'filter_category', 'filters', 'period_filter', 'title',
-            'image', 'content', 'statehood', 'province', 'category_name',
+            'image',  'statehood', 'province', 'category_name',
             'filter_category_title', 'attributes', 'contents', 'galleries',
             'files', 'audios', 'virtual_realities', 'videos', 'locations'
         ]

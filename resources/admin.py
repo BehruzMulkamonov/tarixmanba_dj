@@ -4,11 +4,21 @@ from .models import Category, FilterCategories, PeriodFilter, Filters, Resource,
     Gallery, File, Audio, VirtualReality, Video, \
     Location, Contents, Attributes
 
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title')
 
-admin.site.register(Category)
-admin.site.register(FilterCategories)
+@admin.register(FilterCategories)
+class FilterCategoriesAdmin(admin.ModelAdmin):
+    list_display = ('id', 'category', 'title')  
+
+
 admin.site.register(PeriodFilter)
-admin.site.register(Filters)
+
+@admin.register(Filters)
+class FiltersAdmin(admin.ModelAdmin):
+    list_display = ('id', 'filter_category', 'title')  
+
 admin.site.register(Province)
 
 
@@ -65,10 +75,21 @@ class LocationInline(admin.TabularInline):
     extra = 1
 
 
+
+
+
 @admin.register(Resource)
 class ResourceAdmin(admin.ModelAdmin):
-    list_display = ('title', 'statehood',)
+    list_display = ('id','title', 'statehood',)
     search_fields = ('title',)
     inlines = [
         AttributesInline, ContentsInline, GalleryInline, FileInline,\
         AudioInline, VirtualRealityInline, VideoInline, LocationInline,]
+
+    class Media:
+        js = (
+            "dropdown.js", 
+            "https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js", 
+            )
+        
+
