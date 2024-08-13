@@ -196,3 +196,16 @@ class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
         fields = ['resource_title', 'category_id', 'resource_id', 'latitude', 'longitude']
+
+
+
+class FiltersModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Filters
+        fields = ("id", "title", )
+
+
+class FilterCategoriesModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FilterCategories
+        fields = ("id", "title", )
