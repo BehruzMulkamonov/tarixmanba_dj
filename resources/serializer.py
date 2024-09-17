@@ -118,9 +118,66 @@ class ContentsSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'description')
 
 
+# class ResourceSerializer(serializers.ModelSerializer):
+#     category_name = serializers.SerializerMethodField()
+#     filter_category_title = serializers.SerializerMethodField()
+
+#     attributes = AttributesSerializer(many=True, read_only=True)
+#     contents = ContentsSerializer(many=True, read_only=True)
+#     galleries = GallerySerializer(many=True, read_only=True)
+#     files = FileSerializer(many=True, read_only=True)
+#     audios = AudioSerializer(many=True, read_only=True)
+#     virtual_realities = VirtualRealitySerializer(many=True, read_only=True)
+#     videos = VideoSerializer(many=True, read_only=True)
+#     locations = LocationSerializer(many=True, read_only=True)
+
+#     class Meta:
+#         model = Resource
+#         fields = [
+#             'id', 'category', 'filter_category', 'filters', 'period_filter', 'title',
+#             'image',  'statehood', 'province', 'category_name',
+#             'filter_category_title', 'attributes', 'contents', 'galleries',
+#             'files', 'audios', 'virtual_realities', 'videos', 'locations'
+#         ]
+
+#     def get_category_name(self, obj):
+#         return obj.category.title if obj.category else None
+
+#     def get_filter_category_title(self, obj):
+#         return obj.filter_category.title if obj.filter_category else None
+
+#     def to_representation(self, instance):
+#         representation = super().to_representation(instance)
+
+#         request = self.context.get('request')
+
+#         def build_absolute_url(path):
+#             if path and not path.startswith('http'):
+#                 return self.context['request'].build_absolute_uri(path)
+#             return path
+
+#         # Absolyut URL'larni yaratish
+#         if 'image' in representation:
+#             representation['image'] = build_absolute_url(representation['image'])
+
+#         for gallery in representation.get('galleries', []):
+#             if 'image' in gallery:
+#                 gallery['image'] = build_absolute_url(gallery['image'])
+
+#         for file in representation.get('files', []):
+#             if 'file' in file:
+#                 file['file'] = build_absolute_url(file['file'])
+
+#         return representation
 class ResourceSerializer(serializers.ModelSerializer):
     category_name = serializers.SerializerMethodField()
     filter_category_title = serializers.SerializerMethodField()
+
+    # Boolean maydonlar: fayllar va audio mavjudligini tekshirish uchun
+    has_image = serializers.SerializerMethodField()
+    has_audio = serializers.SerializerMethodField()
+    has_file = serializers.SerializerMethodField()
+    has_video = serializers.SerializerMethodField()
 
     attributes = AttributesSerializer(many=True, read_only=True)
     contents = ContentsSerializer(many=True, read_only=True)
@@ -135,9 +192,9 @@ class ResourceSerializer(serializers.ModelSerializer):
         model = Resource
         fields = [
             'id', 'category', 'filter_category', 'filters', 'period_filter', 'title',
-            'image',  'statehood', 'province', 'category_name',
-            'filter_category_title', 'attributes', 'contents', 'galleries',
-            'files', 'audios', 'virtual_realities', 'videos', 'locations'
+            'image', 'statehood', 'province', 'category_name', 'filter_category_title',
+            'has_image', 'has_audio', 'has_file', 'has_video', 'attributes', 'contents',
+            'galleries', 'files', 'audios', 'virtual_realities', 'videos', 'locations'
         ]
 
     def get_category_name(self, obj):
@@ -146,6 +203,22 @@ class ResourceSerializer(serializers.ModelSerializer):
     def get_filter_category_title(self, obj):
         return obj.filter_category.title if obj.filter_category else None
 
+    # Image count() 0 dan katta bo'lsa True, aks holda False
+    def get_has_image(self, obj):
+        return obj.image is not None
+
+    # Audios count() 0 dan katta bo'lsa True, aks holda False
+    def get_has_audio(self, obj):
+        return obj.audios.count() > 0
+
+    # Files count() 0 dan katta bo'lsa True, aks holda False
+    def get_has_file(self, obj):
+        return obj.files.count() > 0
+
+    # Videos count() 0 dan katta bo'lsa True, aks holda False
+    def get_has_video(self, obj):
+        return obj.videos.count() > 0
+
     def to_representation(self, instance):
         representation = super().to_representation(instance)
 
@@ -153,20 +226,12 @@ class ResourceSerializer(serializers.ModelSerializer):
 
         def build_absolute_url(path):
             if path and not path.startswith('http'):
-                return self.context['request'].build_absolute_uri(path)
+                return request.build_absolute_uri(path)
             return path
 
-        # Absolyut URL'larni yaratish
-        if 'image' in representation:
+        # Absolyut URL'larni yaratish faqat kerakli joylarda
+        if 'image' in representation and representation['image']:
             representation['image'] = build_absolute_url(representation['image'])
-
-        for gallery in representation.get('galleries', []):
-            if 'image' in gallery:
-                gallery['image'] = build_absolute_url(gallery['image'])
-
-        for file in representation.get('files', []):
-            if 'file' in file:
-                file['file'] = build_absolute_url(file['file'])
 
         return representation
 

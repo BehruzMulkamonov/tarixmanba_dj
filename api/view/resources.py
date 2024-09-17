@@ -421,7 +421,7 @@ def resourceDetailView(request, pk):
 
 @api_view(['GET'])
 def catResourceListView(request):
-    category = Category.objects.all()
+    category = Category.objects.all().order_by('order')
     serializer = CategoryResourceSerializer(category, context={'request': request}, many=True)
     serialized_data = serializer.data
 
