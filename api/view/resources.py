@@ -283,7 +283,7 @@ from resources.serializer import CategorySerializer, PeriodFilterSerializer, Fil
 def categoryListView(request):
     paginator = PageNumberPagination()
     paginator.page_size = 10
-    cats = Category.objects.all()
+    cats = Category.objects.all().order_by('order')
 
     result_page = paginator.paginate_queryset(cats, request)
     serializer = CategorySerializer(result_page, many=True, context={'request': request})
